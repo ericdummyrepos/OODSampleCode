@@ -150,3 +150,21 @@ public class ParkingService {
     }
 }
 
+// 一种业务驱动写法，mock流程
+public class Main {
+    public static void main(String[] args) {
+        ParkingLot lot = new ParkingLot();
+        lot.addSpot(new ParkingSpot("S1", VehicleType.COMPACT));
+
+        ParkingService service = new ParkingService(lot);
+        Vehicle car = new Vehicle("ABC-123", VehicleType.COMPACT);
+
+        Ticket ticket = service.enter(car);
+
+        // After 2 hours...
+        try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
+
+        PaymentProcessor processor = new PaymentProcessor(new CreditCardPayment());
+        service.exit(ticket, processor);
+    }
+}
